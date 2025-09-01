@@ -1,5 +1,5 @@
 output "vpc_id" {
-  value = aws_vpc.this.id
+  value = aws_vpc.sandbox.id
 }
 
 output "public_subnet_ids" {

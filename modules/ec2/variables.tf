@@ -1,25 +1,30 @@
 variable "name" {
-  type = string
-}
-
+    type = string 
+    }
 variable "vpc_id" {
-  type = string
-}
-
+    type = string 
+    }
 variable "subnet_id" {
-  type = string
-}
-
+    type = string 
+    }
 variable "instance_type" {
-  type = string
-}
-
-variable "key_name" {
-  type    = string
-  default = null
-}
-
+    type = string 
+    }
+variable "sg" { 
+   type = string 
+   }
+variable "ssh_cidr" { 
+   type = string
+   default = null 
+   }
+variable "associate_public_ip" { 
+   type = bool
+   default = false 
+   }
+variable "user_data" {
+    type = string 
+    default = null 
+    }
 variable "tags" {
-  type    = map(string)
-  default = {}
-}
+    type = map(string)
+     }

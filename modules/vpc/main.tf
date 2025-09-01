@@ -1,12 +1,12 @@
-resource "aws_vpc" "this" {
+resource "aws_vpc" "sandbox" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = merge(var.tags, { Name = "${var.name}-vpc" })
 }
 
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
+resource "aws_internet_gateway" "sandbox" {
+  vpc_id = aws_vpc.sandbox.id
   tags   = merge(var.tags, { Name = "${var.name}-igw" })
 }
 
@@ -17,7 +17,7 @@ locals {
 
 resource "aws_subnet" "public" {
   for_each                  = local.public
-  vpc_id                    = aws_vpc.this.id
+  vpc_id                    = aws_vpc.sandbox.id
   cidr_block                = each.value.cidr
   availability_zone         = each.value.az
   map_public_ip_on_launch   = true
@@ -26,21 +26,21 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   for_each          = local.private
-  vpc_id            = aws_vpc.this.id
+  vpc_id            = aws_vpc.sandbox.id
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
   tags = merge(var.tags, { Name = "${var.name}-private-${each.key}" })
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.sandbox.id
   tags   = merge(var.tags, { Name = "${var.name}-public-rt" })
 }
 
 resource "aws_route" "public_internet" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.this.id
+  gateway_id             = aws_internet_gateway.sandbox.id
 }
 
 resource "aws_route_table_association" "public" {
@@ -50,7 +50,7 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.sandbox.id
   tags   = merge(var.tags, { Name = "${var.name}-private-rt" })
 }
 
